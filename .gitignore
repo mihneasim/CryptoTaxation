@@ -1,0 +1,9 @@
+*.pyc
+*.pyo
+.*.swp
+/bin
+/include
+/lib
+/.Python
+/.cache
+/pip-selfcheck.json
