@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 import pytest
 
-from wallets import Trade, Wallet
+from wallet import Trade, Wallet
 
 
 class TestWallets(object):
