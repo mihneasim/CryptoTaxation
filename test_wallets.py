@@ -46,3 +46,17 @@ class TestWallets(object):
         btc_wallet.buy(1, eur_wallet, 10000, dt(2017, 12, 3, 12, 30))
         assert eur_wallet.balance == pytest.approx(-8000)
         assert eur_wallet.get_trades_count() == 1
+
+    def test_fifo_rule_applies(self):
+        btc_wallet = Wallet(Symbols.XBT)
+        eur_wallet = Wallet(Symbols.EUR)
+        bch_wallet = Wallet(Symbols.BCH)
+        eur_wallet.deposit(100000)
+        btc_wallet.buy(0.5, eur_wallet, 10000, dt(2017, 12, 3, 12, 30))
+        btc_wallet.buy(0.3, eur_wallet, 13000, dt(2017, 12, 3, 12, 30))
+        bch_wallet.buy(3, btc_wallet, 0.1, dt(2017, 12, 3, 12, 30))
+        assert btc_wallet.balance == pytest.approx(0.5)
+        trades_gen = btc_wallet.trades_gen()
+        assert next(trades_gen).amount == pytest.approx(0.2)
+        assert next(trades_gen).amount == pytest.approx(0.3)
+

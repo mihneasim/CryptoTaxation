@@ -46,12 +46,12 @@ class Wallet(object):
         date = date or dt.now()
         while amount > 0:
             if len(self.trades):
-                if (self.trades[-1].amount > amount):
-                    self.trades[-1].amount -= amount
+                if (self.trades[0].amount > amount):
+                    self.trades[0].amount -= amount
                     amount = 0
                 else:
-                    amount -= self.trades[-1].amount
-                    self.trades.pop()
+                    amount -= self.trades[0].amount
+                    self.trades.pop(0)
             else:
                 self.deposit(-amount, date)
                 amount = 0
