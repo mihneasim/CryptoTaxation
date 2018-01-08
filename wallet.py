@@ -1,5 +1,8 @@
 from datetime import datetime as dt
 
+
+APP_WALLETS = {} # Singleton accross app instance
+
 class Trade(object):
     """
     Represents aquisition done through a trade, an amount of currency
@@ -24,6 +27,16 @@ class Wallet(object):
     def __init__(self, currency):
         self.currency = currency
         self.trades = []
+
+    @staticmethod
+    def getInstance(currency):
+        """ Get or create singleton wallet """
+        if currency in APP_WALLETS:
+            return APP_WALLETS[currency]
+        else:
+            wallet = Wallet(currency)
+            APP_WALLETS[currency] = wallet
+            return wallet
 
     def deposit(self, amount, date=None):
         date = date or dt.now()
