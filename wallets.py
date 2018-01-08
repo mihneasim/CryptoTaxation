@@ -31,13 +31,25 @@ class Wallet(object):
 
     def withdraw(self, amount, date=None):
         date = date or dt.now()
-        self.trades[-1].amount -= amount
-        # TODO implement properly
+        while amount > 0:
+            if len(self.trades):
+                if (self.trades[-1].amount > amount):
+                    self.trades[-1].amount -= amount
+                    amount = 0
+                else:
+                    amount -= self.trades[-1].amount
+                    self.trades.pop()
+            else:
+                self.deposit(-amount, date)
+                amount = 0
 
     def buy(self, amount, trading_wallet, rate, date):
         trade = Trade(self.currency, amount, trading_wallet.get_currency(), rate, date)
         trading_wallet.withdraw(amount * rate, date)
         self.trades.append(trade)
+
+    def sell(self, amount, trading_wallet, rate, date):
+        return trading_wallet.buy(amount * rate, self, 1 / rate, date)
 
     def trades_gen(self):
         for trade in self.trades:
