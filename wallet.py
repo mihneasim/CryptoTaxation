@@ -1,5 +1,7 @@
 from datetime import datetime as dt
 
+from const import Symbols
+
 
 APP_WALLETS = {} # Singleton accross app instance
 
@@ -31,6 +33,8 @@ class Wallet(object):
     @staticmethod
     def getInstance(currency):
         """ Get or create singleton wallet """
+        if not isinstance(currency, Symbols):
+            raise TypeError("Expected enum type Symbols, got %r type %s" % (currency, type(currency)))
         if currency in APP_WALLETS:
             return APP_WALLETS[currency]
         else:
