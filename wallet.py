@@ -47,6 +47,22 @@ class Wallet(object):
         self.trades.append(Trade(self.currency, amount, self.currency, 1, date))
 
     def withdraw(self, amount, date=None):
+        """
+        When trading, e.g. selling one for another, the withdraw
+        of the wallet we are selling from starts with oldest acquisition.
+        This is the FIFO rule of taxing: when selling something, you have to
+        use your earliest acquisition price to compute profit.
+
+        It's like the coin is actually physical and you start with the
+        oldest ones in the stack. Profit is your sellprice vs. their initial
+        price you bought them for.
+
+        When withdrawing EUR[1], profit is 0 (we can say we buy/sell euro
+        with a forever flat rate of 1 to 1).
+
+        [1] Actually, let's make this configurable. Maybe you will be
+        interested in taxation vs USD or a local currency.
+        """
         date = date or dt.now()
         while amount > 0:
             if len(self.trades):
