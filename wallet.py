@@ -42,6 +42,11 @@ class Wallet(object):
             APP_WALLETS[currency] = wallet
             return wallet
 
+    @staticmethod
+    def getAll():
+        for key in APP_WALLETS:
+            yield APP_WALLETS[key]
+
     def deposit(self, amount, date=None):
         date = date or dt.now()
         self.trades.append(Trade(self.currency, amount, self.currency, 1, date))

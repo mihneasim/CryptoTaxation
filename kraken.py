@@ -47,3 +47,9 @@ def parse_file_gen(csvfile):
     next(reader)
     for line in reader:
         yield parse_line(line)
+
+def process_file(csv_file):
+   """ The main entry point - the financial execution of the sheet """
+   trades_gen = parse_file_gen(csv_file)
+   for trade in trades_gen:
+       trade.dest.buy(trade.amount, trade.src, trade.rate, trade.date)
