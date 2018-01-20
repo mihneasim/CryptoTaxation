@@ -1,6 +1,6 @@
 from datetime import datetime as dt
 
-from const import Symbols
+from .const import Symbols
 
 
 APP_WALLETS = {} # Singleton accross app instance

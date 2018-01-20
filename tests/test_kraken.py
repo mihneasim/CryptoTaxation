@@ -1,9 +1,9 @@
 from datetime import datetime as dt
 import pytest
 
-from const import Symbols
-from wallet import Wallet
-import kraken
+from crypto_tax.const import Symbols
+from crypto_tax.wallet import Wallet
+from crypto_tax import kraken
 
 def test_pair_to_wallets():
     src, dest = kraken.pair_to_wallets('XXBTZEUR')
@@ -15,7 +15,7 @@ def test_pair_to_wallets():
     assert src2 == dest
 
 def test_csv_parsing():
-    gen = kraken.parse_file_gen('few-lines.csv')
+    gen = kraken.parse_file_gen('tests/fixtures/few-lines.csv')
     trade = next(gen)
     assert trade.src is Wallet.getInstance(Symbols.EUR)
     assert trade.dest is Wallet.getInstance(Symbols.XBT)
@@ -30,7 +30,7 @@ def test_csv_parsing():
     assert trade.amount == pytest.approx(0.04568334)
 
 def test_process_file():
-    kraken.process_file('few-lines.csv')
+    kraken.process_file('tests/fixtures/few-lines.csv')
     expected_balances = {
         Symbols.EUR: -4040.237386,
         Symbols.XBT: 0.768813,

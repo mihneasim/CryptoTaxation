@@ -1,8 +1,8 @@
 from datetime import datetime as dt
 import pytest
 
-from const import Symbols
-from wallet import Trade, Wallet
+from crypto_tax.const import Symbols
+from crypto_tax.wallet import Trade, Wallet
 
 
 class TestWallets(object):

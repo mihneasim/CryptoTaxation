@@ -1,8 +1,8 @@
 import csv
 from datetime import datetime as dt
 
-from const import Symbols
-from wallet import Wallet
+from .const import Symbols
+from .wallet import Wallet
 
 EXCHANGE_SYMBOLS = {
         'XBT': Symbols.XBT,
