@@ -8,7 +8,8 @@ EXCHANGE_SYMBOLS = {
     'EUR': Symbols.EUR,
     'XLM': Symbols.XLM,
     'BCH': Symbols.BCH,
-    'ETH': Symbols.ETH
+    'ETH': Symbols.ETH,
+    'XRP': Symbols.XRP
 }
 
 # we actually need from Symbol to str

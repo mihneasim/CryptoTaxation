@@ -8,3 +8,4 @@ class Symbols(Enum):
     EUR = 'EUR'
     XLM = 'XLM'
     ETH = 'ETH'
+    XRP = 'XRP'

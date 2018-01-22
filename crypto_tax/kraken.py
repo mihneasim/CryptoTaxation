@@ -10,7 +10,8 @@ EXCHANGE_SYMBOLS = {
         'ZEUR': Symbols.EUR,
         'XXLM': Symbols.XLM,
         'BCH': Symbols.BCH,
-        'XETH': Symbols.ETH
+        'XETH': Symbols.ETH,
+        'XXRP': Symbols.XRP
         }
 
 class TradesLine(object):
