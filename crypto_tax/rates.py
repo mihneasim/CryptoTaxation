@@ -1,4 +1,5 @@
 from .const import Symbols
+from .cryptocompare import CryptoCompare
 
 def get_rate(src, dest, date):
     if not isinstance(src, Symbols):

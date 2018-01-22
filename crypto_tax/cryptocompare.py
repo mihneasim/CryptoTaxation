@@ -25,6 +25,8 @@ class CryptoCompare(object):
         """ API request """
         s_src = EXCHANGE_SYMBOLS_REVERSE[src]
         s_dest = EXCHANGE_SYMBOLS_REVERSE[dest]
+        if s_src == s_dest:
+            return 1.0
         timestamp = int(ts)
         r = requests.get(CryptoCompare.REQUEST.format(s_src, s_dest, int(ts)))
         if r.status_code == 200:

@@ -1,7 +1,10 @@
+import logging
 from datetime import datetime as dt
 
 from .const import Symbols
+from .rates import get_rate
 
+LOGGER = logging.getLogger(__name__)
 
 APP_WALLETS = {} # Singleton accross app instance
 
@@ -69,13 +72,35 @@ class Wallet(object):
         interested in taxation vs USD or a local currency.
         """
         date = date or dt.now()
+
+        def _log_profit(amount, then):
+            """ Profit for selling amount bought `then` """
+            if self.currency == Symbols.EUR:
+                return
+            rate = 0.0
+            sell_rate = 0.0
+            try:
+                rate = get_rate(self.currency, Symbols.EUR, then)
+            except:
+                LOGGER.error("Error getting rate %s %s %s", self.currency, Symbols.EUR, then)
+
+            try:
+                sell_rate = get_rate(self.currency, Symbols.EUR, date)
+            except:
+                LOGGER.error("Error getting rate %s %s %s", self.currency, Symbols.EUR, date)
+
+            LOGGER.debug("{}: Selling {:f} {} bought on {} (rate {:.2f} EUR) for rate: {:.2f} EUR, profit: {:.2f} EUR".format(
+                    date.strftime("%d-%m-%Y"), amount, self.currency.value, then.strftime("%d-%m-%Y"), rate, sell_rate, (sell_rate - rate) * amount))
+
         while amount > 0:
             if len(self.trades):
                 if (self.trades[0].amount > amount):
                     self.trades[0].amount -= amount
+                    _log_profit(amount, self.trades[0].date)
                     amount = 0
                 else:
                     amount -= self.trades[0].amount
+                    _log_profit(self.trades[0].amount, self.trades[0].date)
                     self.trades.pop(0)
             else:
                 self.deposit(-amount, date)
