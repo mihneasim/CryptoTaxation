@@ -16,7 +16,6 @@ Clone/Download the project, preferably set up a virtualenv, then install depende
 pip install -r requirements.txt
 ```
 
-
 ## Running the tests
 
 Tests should pass
@@ -24,6 +23,18 @@ Tests should pass
 ```
 pytest
 ```
+
+### Running the app
+
+Go to Kraken, click "History", download your report with all columns checked,
+unzip, move it in the root folder of the project.
+Suppose it's named `trades.csv`
+
+```
+python run.py trades.csv
+```
+
+Enjoy.
 
 ## Built With
 
