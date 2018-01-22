@@ -31,7 +31,9 @@ pytest
 
 ## Long Term Vision
 
-Multiple exchanges, caching historical rates, multiple tax authorities one can report to using this tool.
+ * Multiple exchanges
+ * Cache historical rates
+ * Multiple tax authorities one can report to using this tool.
 
 ## Authors
 
