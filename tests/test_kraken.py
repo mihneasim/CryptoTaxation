@@ -26,14 +26,14 @@ def test_csv_parsing():
     count = 2
     for trade in gen:
         count += 1
-    assert count == 10
-    assert trade.amount == pytest.approx(0.04568334)
+    assert count == 11
+    assert trade.amount == pytest.approx(559.76)
 
 def test_process_file():
     kraken.process_file('tests/fixtures/few-lines.csv')
     expected_balances = {
-        Symbols.EUR: -4040.237386,
-        Symbols.XBT: 0.768813,
+        Symbols.EUR: -3480.477386,
+        Symbols.XBT: 0.728813,
         Symbols.ETH: 2.370460,
         Symbols.XLM: 6172.8395,
         Symbols.BCH: 0.04568334

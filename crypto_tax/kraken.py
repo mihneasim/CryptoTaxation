@@ -30,15 +30,22 @@ def pair_to_wallets(pair):
     dest, src = pair[:int(len(pair) / 2)], pair[int(len(pair) / 2):]
     return Wallet.getInstance(EXCHANGE_SYMBOLS[src]), Wallet.getInstance(EXCHANGE_SYMBOLS[dest])
 
-
 def parse_line(line):
     """ Parses a CSV sheet line into a TradesLine object """
     date = dt.strptime(line[3], '%Y-%m-%d %H:%M:%S.%f')
     pair = line[2]
     rate = float(line[6])
     amount = float(line[9])
-
+    sell_or_buy = line[4]
     src, dest = pair_to_wallets(pair)
+
+    if sell_or_buy == 'sell':
+       xchg = dest
+       dest = src
+       src = xchg
+       amount = float(line[7])
+       rate = 1.0 / rate
+
     return TradesLine(src, dest, rate, amount, date)
 
 def parse_file_gen(csvfile):
