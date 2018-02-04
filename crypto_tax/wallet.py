@@ -7,6 +7,7 @@ from .rates import get_rate
 LOGGER = logging.getLogger(__name__)
 
 APP_WALLETS = {} # Singleton accross app instance
+PROFITS = {} # per year
 
 class Trade(object):
     """
@@ -89,8 +90,12 @@ class Wallet(object):
             except:
                 LOGGER.error("Error getting rate %s %s %s", self.currency, Symbols.EUR, date)
 
+            profit = (sell_rate - rate) * amount
+            year = date.year
+            PROFITS[year] = PROFITS.setdefault(year, 0.0) + profit
+
             LOGGER.debug("{}: Selling {:f} {} bought on {} (rate {:.2f} EUR) for rate: {:.2f} EUR, profit: {:.2f} EUR".format(
-                    date.strftime("%d-%m-%Y"), amount, self.currency.value, then.strftime("%d-%m-%Y"), rate, sell_rate, (sell_rate - rate) * amount))
+                    date.strftime("%d-%m-%Y"), amount, self.currency.value, then.strftime("%d-%m-%Y"), rate, sell_rate, profit))
 
         while amount > 0:
             if len(self.trades):

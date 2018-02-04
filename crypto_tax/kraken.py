@@ -8,6 +8,7 @@ EXCHANGE_SYMBOLS = {
         'XBT': Symbols.XBT,
         'XXBT': Symbols.XBT,
         'ZEUR': Symbols.EUR,
+        'EUR': Symbols.EUR,
         'XXLM': Symbols.XLM,
         'BCH': Symbols.BCH,
         'XETH': Symbols.ETH,
