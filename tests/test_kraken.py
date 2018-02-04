@@ -27,7 +27,7 @@ def test_csv_parsing():
     for trade in gen:
         count += 1
     assert count == 11
-    assert trade.amount == pytest.approx(559.76)
+    assert trade.amount == pytest.approx(0.04)
 
 def test_process_file():
     kraken.process_file('tests/fixtures/few-lines.csv')

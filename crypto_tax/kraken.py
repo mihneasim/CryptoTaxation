@@ -20,12 +20,13 @@ class TradesLine(object):
     A representation of a line inside the trades CSV file
     """
 
-    def __init__(self, src, dest, rate, amount, date):
+    def __init__(self, src, dest, rate, amount, date, sell_or_buy):
         self.src = src
         self.dest = dest
         self.rate = rate
         self.amount = amount
         self.date = date
+        self.type = sell_or_buy
 
 def pair_to_wallets(pair):
     dest, src = pair[:int(len(pair) / 2)], pair[int(len(pair) / 2):]
@@ -40,14 +41,7 @@ def parse_line(line):
     sell_or_buy = line[4]
     src, dest = pair_to_wallets(pair)
 
-    if sell_or_buy == 'sell':
-       xchg = dest
-       dest = src
-       src = xchg
-       amount = float(line[7])
-       rate = 1.0 / rate
-
-    return TradesLine(src, dest, rate, amount, date)
+    return TradesLine(src, dest, rate, amount, date, sell_or_buy)
 
 def parse_file_gen(csvfile):
     """ Returns one trade at a time """
@@ -61,4 +55,7 @@ def process_file(csv_file):
    """ The main entry point - the financial execution of the sheet """
    trades_gen = parse_file_gen(csv_file)
    for trade in trades_gen:
+      if trade.type == 'sell':
+       trade.dest.sell(trade.amount, trade.src, trade.rate, trade.date)
+      else:
        trade.dest.buy(trade.amount, trade.src, trade.rate, trade.date)
