@@ -10,7 +10,7 @@ if __name__ == '__main__':
     process_file(sys.argv[1])
     print('Wallet balances -except direct deposits-')
     for (currency, wallet) in APP_WALLETS.items():
-        print("%f %r" % (wallet.balance, currency))
+        print("%s %f" % (currency.name, wallet.balance))
 
     print('Recorded profits, per year')
     for (year, profit) in PROFITS.items():
