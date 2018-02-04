@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 import pytest
+import requests_mock
 
 from crypto_tax.const import Symbols
 from crypto_tax.wallet import Wallet
@@ -29,11 +30,13 @@ def test_csv_parsing():
     assert count == 11
     assert trade.amount == pytest.approx(0.04)
 
-def test_process_file():
+@requests_mock.mock()
+def test_process_file(*args):
+    args[0].get(requests_mock.ANY, text='{"ETH":{"BTC":0.05352}}')
     kraken.process_file('tests/fixtures/few-lines.csv')
     expected_balances = {
-        Symbols.EUR: -3480.477386,
-        Symbols.XBT: 0.728813,
+        Symbols.EUR: -3487.837375,
+        Symbols.XBT: 0.728382,
         Symbols.ETH: 2.370460,
         Symbols.XLM: 6172.8395,
         Symbols.BCH: 0.04568334

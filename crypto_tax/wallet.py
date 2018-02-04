@@ -55,7 +55,7 @@ class Wallet(object):
         date = date or dt.now()
         self.trades.append(Trade(self.currency, amount, self.currency, 1, date))
 
-    def withdraw(self, amount, date=None):
+    def withdraw(self, amount, date=None, is_tax=False):
         """
         When trading, e.g. selling one for another, the withdraw
         of the wallet we are selling from starts with oldest acquisition.
@@ -69,6 +69,8 @@ class Wallet(object):
         When withdrawing EUR[1], profit is 0 (we can say we buy/sell euro
         with a forever flat rate of 1 to 1).
 
+        Fees payed to the exchanged are not counted as a sell.
+
         [1] Actually, let's make this configurable. Maybe you will be
         interested in taxation vs USD or a local currency.
         """
@@ -76,7 +78,7 @@ class Wallet(object):
 
         def _log_profit(amount, then):
             """ Profit for selling amount bought `then` """
-            if self.currency == Symbols.EUR:
+            if self.currency == Symbols.EUR or is_tax:
                 return
             rate = 0.0
             sell_rate = 0.0
@@ -111,13 +113,19 @@ class Wallet(object):
                 self.deposit(-amount, date)
                 amount = 0
 
-    def buy(self, amount, trading_wallet, rate, date):
+    def withdraw_for_fee(self, amount, date=None):
+        return self.withdraw(amount, date, True)
+
+    def buy(self, amount, trading_wallet, rate, date, fee=0.0):
+        """ Fee is in trading_wallet currency, deducted on top """
         trade = Trade(self.currency, amount, trading_wallet.get_currency(), rate, date)
+        trading_wallet.withdraw_for_fee(fee, date)
         trading_wallet.withdraw(amount * rate, date)
         self.trades.append(trade)
 
-    def sell(self, amount, trading_wallet, rate, date):
-        return trading_wallet.buy(amount * rate, self, 1 / rate, date)
+    def sell(self, amount, trading_wallet, rate, date, fee=0.0):
+        trading_wallet.withdraw_for_fee(fee, date)
+        return trading_wallet.buy(amount * rate, self, 1 / rate, date, 0.00)
 
     def trades_gen(self):
         for trade in self.trades:
